@@ -1,0 +1,23 @@
+<resources>
+
+    <color name="black_overlay">#66000000</color>
+	<string-array name="default_color_choice_values" translatable="false">
+        <item>#000000</item>
+        <item>#884400</item>
+        <item>#b67e00</item>
+        <item>#ffaa00</item>
+        <item>#fffffb</item>
+        <item>#ffbb33</item>
+        <item>#9933cc</item>
+        <item>#669900</item>
+        <item>#ff8800</item>
+        <item>#cc0000</item>
+        <item>#ffffff</item>
+        <item>#eeeeee</item>
+        <item>#cccccc</item>
+        <item>#888888</item>
+        <item>#111111</item>
+        <item>#222222</item>
+        <item>#333333</item>
+    </string-array>
+</resources>
