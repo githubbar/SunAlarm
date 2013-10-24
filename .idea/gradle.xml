@@ -3,9 +3,8 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="c:\Users\oleykin\Documents\Ziplock\Android Projects\SunAlarmProject" />
-        <option name="useAutoImport" value="true" />
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="C:\Users" />
       </GradleProjectSettings>
     </option>
   </component>
