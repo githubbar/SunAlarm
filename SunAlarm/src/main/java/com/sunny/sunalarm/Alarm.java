@@ -58,6 +58,7 @@ public final class Alarm implements Parcelable {
         p.writeString(label);
         p.writeParcelable(alert, flags);
         p.writeInt(silent ? 1 : 0);
+        p.writeInt(sunrise_duration);
     }
     //////////////////////////////
     // end Parcelable apis
@@ -123,6 +124,12 @@ public final class Alarm implements Parcelable {
         public static final String ALERT = "alert";
 
         /**
+         * Sunrise delay in minutes
+         * <P>Type: STRING</P>
+         */
+        public static final String SUNRISE_DURATION = "sunrise_duration";
+
+        /**
          * The default sort order for this table
          */
         public static final String DEFAULT_SORT_ORDER =
@@ -133,7 +140,7 @@ public final class Alarm implements Parcelable {
 
         static final String[] ALARM_QUERY_COLUMNS = {
             _ID, HOUR, MINUTES, DAYS_OF_WEEK, ALARM_TIME,
-            ENABLED, VIBRATE, MESSAGE, ALERT };
+            ENABLED, VIBRATE, MESSAGE, ALERT, SUNRISE_DURATION };
 
         /**
          * These save calls to cursor.getColumnIndexOrThrow()
@@ -148,6 +155,7 @@ public final class Alarm implements Parcelable {
         public static final int ALARM_VIBRATE_INDEX = 6;
         public static final int ALARM_MESSAGE_INDEX = 7;
         public static final int ALARM_ALERT_INDEX = 8;
+        public static final int ALARM_SUNRISE_DURATION_INDEX = 9;
     }
     //////////////////////////////
     // End column definitions
@@ -164,6 +172,7 @@ public final class Alarm implements Parcelable {
     public String     label;
     public Uri        alert;
     public boolean    silent;
+    public int        sunrise_duration;
     // TODO: Add color buttons
 
 
@@ -195,6 +204,7 @@ public final class Alarm implements Parcelable {
                         RingtoneManager.TYPE_ALARM);
             }
         }
+        sunrise_duration = c.getInt(Columns.ALARM_SUNRISE_DURATION_INDEX);
     }
 
     public Alarm(Parcel p) {
@@ -208,6 +218,7 @@ public final class Alarm implements Parcelable {
         label = p.readString();
         alert = (Uri) p.readParcelable(null);
         silent = p.readInt() == 1;
+        sunrise_duration  = p.readInt();
     }
 
     // Creates a default alarm at the current time.
@@ -220,6 +231,7 @@ public final class Alarm implements Parcelable {
         vibrate = true;
         daysOfWeek = new DaysOfWeek(0);
         alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        sunrise_duration  = 5;
     }
 
     public String getLabelOrDefault(Context context) {

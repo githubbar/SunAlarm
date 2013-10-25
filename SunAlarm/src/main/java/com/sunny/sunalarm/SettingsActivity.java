@@ -48,7 +48,6 @@ public class SettingsActivity extends PreferenceActivity
             "default_ringtone";
     static final String KEY_AUTO_SILENCE =
             "auto_silence";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

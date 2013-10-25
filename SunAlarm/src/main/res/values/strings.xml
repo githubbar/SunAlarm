@@ -29,6 +29,32 @@
     <!-- Content description for a selected color square. -->
     <string name="color_swatch_description_selected">Color <xliff:g id="color_index" example="14">%1$d</xliff:g> selected</string>
 
+    <string-array name="sunriseDurations">
+        <item>"Off"</item>
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
+        <item>"5"</item>
+        <item>"10"</item>
+        <item>"15"</item>
+        <item>"20"</item>
+        <item>"30"</item>
+    </string-array>
+
+    <string-array name="sunriseDurationValues">
+        <item>"0"</item>
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
+        <item>"5"</item>
+        <item>"10"</item>
+        <item>"15"</item>
+        <item>"20"</item>
+        <item>"30"</item>
+    </string-array>
+
     <!-- -->
     <!-- Label shown on launcher icon -->
     <string name="app_label">Sun Alarm</string>
@@ -77,6 +103,11 @@
 
     <!-- Setting labels on Set alarm screen: Repeat -->
     <string name="alarm_repeat">Repeat</string>
+
+    <!-- Setting labels on Set alarm screen: Sunrise -->
+    <string name="alarm_sunrise">Sunrise</string>
+
+    <string name="alarm_sunrise_summary">Display before alarm for</string>
 
     <!-- Setting labels on Set alarm screen: Select alarm ringtone  -->
     <string name="alert">Ringtone</string>

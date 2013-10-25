@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -159,46 +160,62 @@ public class AlarmAlertFullScreen extends Activity {
                 });
 
         /* Set the title from the passed in alarm */
-//        setTitle();
-        // todo: inner is null
-        FrameLayout inner = (FrameLayout)rootView.getChildAt(0);
-        inner.setVisibility(View.INVISIBLE);
+        setTitle();
 
-        // Show UI dialog after a delay
-        class OneShotTask extends Thread {
-            ViewGroup rootView;
-            OneShotTask(ViewGroup a) { rootView = a; }
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FrameLayout inner = (FrameLayout)rootView.getChildAt(0);
-                        inner.setVisibility(View.VISIBLE);
-                    }
-                });
+        int delay = mAlarm.sunrise_duration*60;
+        /*If Sunrise duration is not set to 0*/
+        if (delay > 0) {
+            /*Enable dismiss with a single touch until the IU shows*/
+            rootView.setOnTouchListener(
+                    new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if (((ViewGroup)v).getChildAt(0).getVisibility() == View.INVISIBLE);
+                                dismiss(false);
+                            return true;
+                        }
+                    });
+
+            /* Hide the UI until the sunrize is complete*/
+            FrameLayout inner = (FrameLayout)rootView.getChildAt(0);
+            inner.setVisibility(View.INVISIBLE);
+
+
+            /* Show UI dialog after a delay*/
+            class OneShotTask extends Thread {
+                ViewGroup rootView;
+                OneShotTask(ViewGroup a) { rootView = a; }
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            FrameLayout inner = (FrameLayout)rootView.getChildAt(0);
+                            inner.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            };
+            Runnable task = new OneShotTask(rootView);
+            ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
+            worker.schedule(task, delay, TimeUnit.SECONDS);
+
+            /*Display sunrise screen*/
+            int COLOR_STAGES = 5;
+            String[] color_array = getApplicationContext().getResources().getStringArray(R.array.default_color_choice_values);
+            List<Animator> animators = new ArrayList<Animator>();
+            for (int i=1; i < COLOR_STAGES; i++){
+    //            int c1 = this.getIntent().getIntExtra("Color"+String.valueOf(i-1), 0);
+    //            int c2 = this.getIntent().getIntExtra("Color" + String.valueOf(i), 0);
+                int c1 = Color.parseColor(color_array[i - 1]);
+                int c2 = Color.parseColor(color_array[i]);
+                animators.add(ObjectAnimator.ofObject(rootView, "backgroundColor", new ArgbEvaluator(), c1, c2));
             }
-        };
-        Runnable task = new OneShotTask(rootView);
-        ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
-        worker.schedule(task, DeskClock.ALARM_DELAY_SEC, TimeUnit.SECONDS);
-
-        // TODO: Display sunrise screen
-        int COLOR_STAGES = 5;
-        String[] color_array = getApplicationContext().getResources().getStringArray(R.array.default_color_choice_values);
-        int delay = DeskClock.ALARM_DELAY_SEC; //delay = this.getIntent().getIntExtra("DELAY_SEC", delay);
-        List<Animator> animators = new ArrayList<Animator>();
-        for (int i=1; i < COLOR_STAGES; i++){
-//            int c1 = this.getIntent().getIntExtra("Color"+String.valueOf(i-1), 0);
-//            int c2 = this.getIntent().getIntExtra("Color" + String.valueOf(i), 0);
-            int c1 = Color.parseColor(color_array[i - 1]);
-            int c2 = Color.parseColor(color_array[i]);
-            animators.add(ObjectAnimator.ofObject(rootView, "backgroundColor", new ArgbEvaluator(), c1, c2));
+            AnimatorSet a = new AnimatorSet();
+            a.playSequentially(animators);
+            a.setDuration((long)(1000.0*delay/COLOR_STAGES));
+            a.start();
         }
-        AnimatorSet a = new AnimatorSet();
-        a.playSequentially(animators);
-        a.setDuration((long)(1000.0*delay/COLOR_STAGES));
-        a.start();
-
     }
 
     // Attempt to snooze this alert.

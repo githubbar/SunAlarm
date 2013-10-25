@@ -165,7 +165,7 @@ public class Alarms {
         // A null alert Uri indicates a silent alarm.
         values.put(Alarm.Columns.ALERT, alarm.alert == null ? ALARM_ALERT_SILENT
                 : alarm.alert.toString());
-
+        values.put(Alarm.Columns.SUNRISE_DURATION, alarm.sunrise_duration);
         return values;
     }
 

@@ -142,7 +142,7 @@ public class AlarmKlaxon extends Service {
                 play(alarm);
             }
         };
-        worker.schedule(task, DeskClock.ALARM_DELAY_SEC, TimeUnit.SECONDS);
+        worker.schedule(task, alarm.sunrise_duration*60, TimeUnit.SECONDS);
 
 
         mCurrentAlarm = alarm;

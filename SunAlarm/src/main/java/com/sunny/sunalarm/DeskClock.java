@@ -55,7 +55,6 @@ import java.util.Random;
  * DeskClock clock view for desk docks.
  */
 public class DeskClock extends Activity {
-    public  static final int ALARM_DELAY_SEC = 300;
     private static final boolean DEBUG = false;
     private static final String LOG_TAG = "DeskClock";
 

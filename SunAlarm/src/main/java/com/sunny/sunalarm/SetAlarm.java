@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -58,6 +59,7 @@ public class SetAlarm extends PreferenceActivity implements Preference.OnPrefere
     private AlarmPreference mAlarmPref;
     private CheckBoxPreference mVibratePref;
     private RepeatPreference mRepeatPref;
+    private SpinnerPreference mSunrisePref;
 
     private int     mId;
     private int     mHour;
@@ -95,6 +97,9 @@ public class SetAlarm extends PreferenceActivity implements Preference.OnPrefere
         }
         mRepeatPref = (RepeatPreference) findPreference("setRepeat");
         mRepeatPref.setOnPreferenceChangeListener(this);
+
+        mSunrisePref = (SpinnerPreference) findPreference("sunrise");
+        mSunrisePref.setOnPreferenceChangeListener(this);
 
         Intent i = getIntent();
         Alarm alarm = i.getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
@@ -250,6 +255,7 @@ public class SetAlarm extends PreferenceActivity implements Preference.OnPrefere
         mVibratePref.setChecked(alarm.vibrate);
         // Give the alert uri to the preference.
         mAlarmPref.setAlert(alarm.alert);
+        mSunrisePref.setValue(Integer.toString(alarm.sunrise_duration));
         updateTime();
     }
 
@@ -333,6 +339,7 @@ public class SetAlarm extends PreferenceActivity implements Preference.OnPrefere
         alarm.vibrate = mVibratePref.isChecked();
         alarm.label = mLabel.getText().toString();
         alarm.alert = mAlarmPref.getAlert();
+        alarm.sunrise_duration = Integer.parseInt(mSunrisePref.getValue());
         return alarm;
     }
 

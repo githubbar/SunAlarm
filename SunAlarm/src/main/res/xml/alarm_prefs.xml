@@ -36,4 +36,15 @@
     <CheckBoxPreference android:key="vibrate"
         android:persistent="false"
         android:title="@string/alarm_vibrate"/>
+    <com.sunny.sunalarm.SpinnerPreference
+        android:key="sunrise"
+        android:persistent="false"
+        android:title="@string/alarm_sunrise"
+        android:summary="@string/alarm_sunrise_summary"
+        android:entries="@array/sunriseDurations"
+        android:entryValues="@array/sunriseDurationValues"
+        android:defaultValue="5"
+        />
+
+
 </PreferenceScreen>
