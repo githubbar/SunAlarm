@@ -60,6 +60,7 @@ public class AlarmKlaxon extends Service {
 
     // Internal messages
     private static final int KILLER = 1000;
+    private static final int DELAY = 1001;
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -69,6 +70,12 @@ public class AlarmKlaxon extends Service {
                     }
                     sendKillBroadcast((Alarm) msg.obj);
                     stopSelf();
+                    break;
+                case DELAY:
+                    if (Log.LOGV) {
+                        Log.v("*********** Sound delay triggered ***********");
+                    }
+                    play((Alarm)msg.obj);
                     break;
             }
         }
@@ -135,14 +142,8 @@ public class AlarmKlaxon extends Service {
         }
 
         // Delay sound until the sunrise animation has completed seconds
-        ScheduledExecutorService worker =
-                Executors.newSingleThreadScheduledExecutor();
-        Runnable task = new Runnable() {
-            public void run() {
-                play(alarm);
-            }
-        };
-        worker.schedule(task, alarm.sunrise_duration*60, TimeUnit.SECONDS);
+        mHandler.sendMessageDelayed(mHandler.obtainMessage(DELAY, alarm),
+                alarm.sunrise_duration*1000*60);
 
 
         mCurrentAlarm = alarm;
@@ -288,6 +289,7 @@ public class AlarmKlaxon extends Service {
             mVibrator.cancel();
         }
         disableKiller();
+        disableDelay();
     }
 
     /**
@@ -313,5 +315,8 @@ public class AlarmKlaxon extends Service {
         mHandler.removeMessages(KILLER);
     }
 
+    private void disableDelay() {
+        mHandler.removeMessages(DELAY);
+    }
 
 }
