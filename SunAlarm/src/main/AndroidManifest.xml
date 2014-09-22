@@ -1,8 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.sunny.sunalarm"
-        android:versionCode="203" android:versionName="2.0.3">
+        android:versionCode="204" android:versionName="2.0.4">
 
-    <original-package android:name="com.android.alarmclock" />
     <original-package android:name="com.sunny.sunalarm" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -14,7 +13,7 @@
     <uses-permission android:name="android.permission.DEVICE_POWER" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-sdk        android:minSdkVersion="20" android:targetSdkVersion="20" />
+    <uses-sdk        android:minSdkVersion="19" android:targetSdkVersion="19" />
     <application android:label="@string/app_label"
                  android:icon="@mipmap/ic_launcher_alarmclock">
         <provider android:name="AlarmProvider"
@@ -119,15 +118,6 @@
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <!--<receiver android:name="com.android.alarmclock.AnalogAppWidgetProvider" android:label="@string/analog_gadget"-->
-        	<!--android:icon="@mipmap/ic_widget_analog_clock">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-            <!--</intent-filter>-->
-            <!--<meta-data android:name="android.appwidget.oldName" android:value="com.sunny.sunalarm.AnalogAppWidgetProvider" />-->
-            <!--<meta-data android:name="android.appwidget.provider" android:resource="@xml/analog_appwidget" />-->
-        <!--</receiver>-->
 
         <activity android:name=".Screensaver"
             android:label="@string/app_label"
