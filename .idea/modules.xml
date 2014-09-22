@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SunAlarm/SunAlarm.iml" filepath="$PROJECT_DIR$/SunAlarm/SunAlarm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyLibrary/MyLibrary.iml" filepath="$PROJECT_DIR$/MyLibrary/MyLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SunAlarm/SunAlarm-SunAlarm.iml" filepath="$PROJECT_DIR$/SunAlarm/SunAlarm-SunAlarm.iml" />
       <module fileurl="file://$PROJECT_DIR$/SunAlarmProject.iml" filepath="$PROJECT_DIR$/SunAlarmProject.iml" />
     </modules>
   </component>

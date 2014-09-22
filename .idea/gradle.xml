@@ -4,7 +4,15 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
-        <option name="externalProjectPath" value="C:\Users" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="c:/android-sdk-windows/gradle-1.12" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/MyLibrary" />
+            <option value="$PROJECT_DIR$/SunAlarm" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

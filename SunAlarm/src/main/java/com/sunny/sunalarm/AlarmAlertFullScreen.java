@@ -50,7 +50,11 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.math.BigInteger;
+import java.util.concurrent.ExecutorService;
 /**
  * Alarm Clock alarm alert: pops visible indicator and plays alarm
  * tone. This activity is the full screen version which shows over the lock
@@ -89,9 +93,8 @@ public class AlarmAlertFullScreen extends Activity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
         mAlarm = getIntent().getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
-
+        Log.v("Sunrize Duration = " + String.valueOf(mAlarm.sunrise_duration));
         // Get the volume/camera button behavior setting
         final String vol =
                 PreferenceManager.getDefaultSharedPreferences(this)
@@ -105,6 +108,7 @@ public class AlarmAlertFullScreen extends Activity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         win.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         // Turn on the screen unless we are being launched from the AlarmAlert
         // subclass as a result of the screen turning off.
         if (!getIntent().getBooleanExtra(SCREEN_OFF, false)) {
@@ -115,7 +119,7 @@ public class AlarmAlertFullScreen extends Activity {
 
         updateLayout();
 
-        // Register to get the alarm killed/snooze/dismiss intent.
+        // Register to get the m killed/snooze/dismiss intent.
         IntentFilter filter = new IntentFilter(Alarms.ALARM_KILLED);
         filter.addAction(Alarms.ALARM_SNOOZE_ACTION);
         filter.addAction(Alarms.ALARM_DISMISS_ACTION);
@@ -162,7 +166,8 @@ public class AlarmAlertFullScreen extends Activity {
         /* Set the title from the passed in alarm */
         setTitle();
 
-        int delay = mAlarm.sunrise_duration*60;
+        final int delay = mAlarm.sunrise_duration*60;
+        Log.v("Sunrize Duration = " + String.valueOf(delay));
         /*If Sunrise duration is not set to 0*/
         if (delay > 0) {
             /*Enable dismiss with a single touch until the IU shows*/
@@ -200,7 +205,60 @@ public class AlarmAlertFullScreen extends Activity {
             ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
             worker.schedule(task, delay, TimeUnit.SECONDS);
 
+            // send MiLight UDP Socket commands
+            ExecutorService service = Executors.newFixedThreadPool(4);
+            service.submit(new Runnable() {
+                int d = delay;
+                String rgb = "20";
+                String all_off = "210055";
+                String all_on = "220055";
+                String brighter = "230055";
+                String dimmer = "240055";
+                int startColor = 170;
+                int COLOR_STAGES = 16;
+                private void sendSymbol(String symbol){
+                    try {
+                        InetAddress address = InetAddress.getByName("10.0.0.6");
+                        byte[] buffer = new BigInteger(symbol,16).toByteArray();
+                        DatagramSocket datagramSocket = new DatagramSocket();
+                        datagramSocket.send(new DatagramPacket(buffer, buffer.length, address, 8899));
+                        datagramSocket.close();
+                    }
+                    catch (Exception ex) {
+                        Log.e("Exception while communicating with a lightbulb", ex);
+                    }
+                }
+                private void reset() {
+                    for (int i=0;i<9;i++)
+                        sendSymbol(dimmer);
+                    sendSymbol(rgb+Integer.toHexString(startColor)+"55");
+                }
+                private void pause(long ms) {
+                    try {
+                        Thread.sleep(ms);
+                    }
+                    catch (InterruptedException ex) {
+                        Log.e("Light bulb thread sleep interrupted", ex);
+                    }
+                }
+                public void run() {
+                    reset();
+                    pause(1000);
+                    sendSymbol(all_on);
+                    pause(1000);
+                    for (int i=1;i<=COLOR_STAGES;i++) {
+                        sendSymbol(rgb + Integer.toHexString(startColor-i) + "55");
+                        if (i % 4 == 0)
+                            sendSymbol(brighter);
+                        pause(1000*d/COLOR_STAGES);
+                    }
+                    //reset();
+                    //sendSymbol(all_off);
+                }
+            });
+
             /*Display sunrise screen*/
+            /*
             int COLOR_STAGES = 5;
             String[] color_array = getApplicationContext().getResources().getStringArray(R.array.default_color_choice_values);
             List<Animator> animators = new ArrayList<Animator>();
@@ -215,6 +273,7 @@ public class AlarmAlertFullScreen extends Activity {
             a.playSequentially(animators);
             a.setDuration((long)(1000.0*delay/COLOR_STAGES));
             a.start();
+            */
         }
     }
 

@@ -125,7 +125,7 @@ public final class Alarm implements Parcelable {
 
         /**
          * Sunrise delay in minutes
-         * <P>Type: STRING</P>
+         * <P>Type: INTEGER</P>
          */
         public static final String SUNRISE_DURATION = "sunrise_duration";
 
@@ -196,7 +196,6 @@ public final class Alarm implements Parcelable {
             if (alertString != null && alertString.length() != 0) {
                 alert = Uri.parse(alertString);
             }
-
             // If the database alert is null or it failed to parse, use the
             // default alert.
             if (alert == null) {

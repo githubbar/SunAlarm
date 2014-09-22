@@ -13,13 +13,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.DEVICE_POWER" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-sdk        android:minSdkVersion="20" android:targetSdkVersion="20" />
     <application android:label="@string/app_label"
                  android:icon="@mipmap/ic_launcher_alarmclock">
-        <uses-sdk
-                android:minSdkVersion="14"
-                android:targetSdkVersion="17" />
-
         <provider android:name="AlarmProvider"
                 android:authorities="com.sunny.sunalarm"
                 android:exported="false" />
@@ -123,14 +120,14 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.android.alarmclock.AnalogAppWidgetProvider" android:label="@string/analog_gadget"
-        	android:icon="@mipmap/ic_widget_analog_clock">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data android:name="android.appwidget.oldName" android:value="com.sunny.sunalarm.AnalogAppWidgetProvider" />
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/analog_appwidget" />
-        </receiver>
+        <!--<receiver android:name="com.android.alarmclock.AnalogAppWidgetProvider" android:label="@string/analog_gadget"-->
+        	<!--android:icon="@mipmap/ic_widget_analog_clock">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+            <!--</intent-filter>-->
+            <!--<meta-data android:name="android.appwidget.oldName" android:value="com.sunny.sunalarm.AnalogAppWidgetProvider" />-->
+            <!--<meta-data android:name="android.appwidget.provider" android:resource="@xml/analog_appwidget" />-->
+        <!--</receiver>-->
 
         <activity android:name=".Screensaver"
             android:label="@string/app_label"
