@@ -159,6 +159,7 @@ public class AlarmKlaxon extends Service {
         int minutes = (int) Math.round(millis / 60000.0);
         Intent alarmKilled = new Intent(Alarms.ALARM_KILLED);
         alarmKilled.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
+        Log.v("AlarmKlaxon: Set Sunrize Duration = " + String.valueOf(alarm.sunrise_duration));
         alarmKilled.putExtra(Alarms.ALARM_KILLED_TIMEOUT, minutes);
         sendBroadcast(alarmKilled);
     }

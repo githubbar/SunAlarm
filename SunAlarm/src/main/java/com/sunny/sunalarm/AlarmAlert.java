@@ -111,6 +111,7 @@ public class AlarmAlert extends AlarmAlertFullScreen {
             // Launch the full screen activity but do not turn the screen on.
             Intent i = new Intent(this, AlarmAlertFullScreen.class);
             i.putExtra(Alarms.ALARM_INTENT_EXTRA, mAlarm);
+            Log.v("AlarmAlert: Sunrize Duration = " + String.valueOf(mAlarm.sunrise_duration));
             i.putExtra(SCREEN_OFF, true);
             startActivity(i);
             finish();

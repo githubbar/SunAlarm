@@ -48,7 +48,8 @@ import java.util.Calendar;
  */
 public class AlarmClock extends Activity implements OnItemClickListener {
 
-    static final String PREFERENCES = "AlarmClock";
+    // HOPE ITS FIXED: SunAlarm clears all other alarms set in the system clock
+    static final String PREFERENCES = "SunriseAlarm.AlarmClock";
 
     /** This must be false for production.  If true, turns on logging,
         test code, etc. */
@@ -193,6 +194,7 @@ public class AlarmClock extends Activity implements OnItemClickListener {
                 final Alarm alarm = new Alarm(c);
                 Intent intent = new Intent(this, SetAlarm.class);
                 intent.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
+                Log.v("AlarmClock Edit Alarm: Set Sunrize Duration = " + String.valueOf(alarm.sunrise_duration));
                 startActivity(intent);
                 return true;
             }
@@ -344,6 +346,7 @@ public class AlarmClock extends Activity implements OnItemClickListener {
         final Alarm alarm = new Alarm(c);
         Intent intent = new Intent(this, SetAlarm.class);
         intent.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
+        Log.v("AlarmClock OnItemClick: Set Sunrize Duration = " + String.valueOf(alarm.sunrise_duration));
         startActivity(intent);
     }
 }

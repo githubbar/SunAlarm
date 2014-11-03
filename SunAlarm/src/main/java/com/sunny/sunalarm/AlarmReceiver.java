@@ -53,6 +53,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void handleIntent(Context context, Intent intent) {
+        // TODO: disable clicking sound on wakeup screen
         if (Alarms.ALARM_KILLED.equals(intent.getAction())) {
             // The alarm has been killed, update the notification
             updateNotification(context, (Alarm)
@@ -92,6 +93,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             in.unmarshall(data, 0, data.length);
             in.setDataPosition(0);
             alarm = Alarm.CREATOR.createFromParcel(in);
+            Log.v("AlarmReceiver: Sunrize Duration = " + String.valueOf(alarm.sunrise_duration));
         }
 
         if (alarm == null) {
@@ -144,6 +146,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Play the alarm alert and vibrate the device.
         Intent playAlarm = new Intent(Alarms.ALARM_ALERT_ACTION);
         playAlarm.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
+        Log.v("AlarmReceiver: Sunrize Duration play = " + String.valueOf(alarm.sunrise_duration) + " alarm.id = "+String.valueOf(alarm.hashCode()));
         context.startService(playAlarm);
 
         // Trigger a notification that, when clicked, will show the alarm alert
@@ -151,6 +154,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // launched from a user action.
         Intent notify = new Intent(context, AlarmAlert.class);
         notify.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
+        Log.v("AlarmReceiver: Sunrize Duration notify = " + String.valueOf(alarm.sunrise_duration) + " alarm.id = "+String.valueOf(alarm.hashCode()));
         PendingIntent pendingNotify = PendingIntent.getActivity(context,
                 alarm.id, notify, 0);
 
@@ -170,6 +174,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // take care of displaying it if it's OK to do so.
         Intent alarmAlert = new Intent(context, c);
         alarmAlert.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
+        Log.v("AlarmReceiver: Sunrize Duration alarmAlert = " + String.valueOf(alarm.sunrise_duration) + " alarm.id = "+String.valueOf(alarm.hashCode()));
         alarmAlert.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
 
@@ -200,6 +205,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Launch SetAlarm when clicked.
         Intent viewAlarm = new Intent(context, SetAlarm.class);
         viewAlarm.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
+        Log.v("AlarmReceiver: Set Sunrize Duration = " + String.valueOf(alarm.sunrise_duration));
         PendingIntent intent =
                 PendingIntent.getActivity(context, alarm.id, viewAlarm, 0);
 

@@ -109,10 +109,11 @@ public class SetAlarm extends PreferenceActivity implements Preference.OnPrefere
             alarm = new Alarm();
         }
         mOriginalAlarm = alarm;
-
+        Log.v("SetAlarm: Original Sunrize Duration = " + String.valueOf(mOriginalAlarm.sunrise_duration) + " alarm.id = "+String.valueOf(mOriginalAlarm.id));
         // Populate the prefs with the original alarm data.  updatePrefs also
         // sets mId so it must be called before checking mId below.
         updatePrefs(mOriginalAlarm);
+
 
         // We have to do this to get the save/cancel buttons to highlight on
         // their own.
@@ -194,8 +195,10 @@ public class SetAlarm extends PreferenceActivity implements Preference.OnPrefere
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Alarm a = buildAlarmFromUi();
         outState.putParcelable(KEY_ORIGINAL_ALARM, mOriginalAlarm);
-        outState.putParcelable(KEY_CURRENT_ALARM, buildAlarmFromUi());
+        outState.putParcelable(KEY_CURRENT_ALARM, a);
+
         if (mTimePickerDialog != null) {
             if (mTimePickerDialog.isShowing()) {
                 outState.putParcelable(KEY_TIME_PICKER_BUNDLE, mTimePickerDialog
@@ -340,6 +343,7 @@ public class SetAlarm extends PreferenceActivity implements Preference.OnPrefere
         alarm.label = mLabel.getText().toString();
         alarm.alert = mAlarmPref.getAlert();
         alarm.sunrise_duration = Integer.parseInt(mSunrisePref.getValue());
+        //alarm.sunrise_duration = mSunriseValue;
         return alarm;
     }
 

@@ -93,8 +93,12 @@ public class AlarmAlertFullScreen extends Activity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        Intent i = getIntent();
         mAlarm = getIntent().getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
-        Log.v("Sunrize Duration = " + String.valueOf(mAlarm.sunrise_duration));
+        // TODO: parcel contains the original values, but not the changed ones; looks like we are getting the wrong alarm (different address, same id though)
+        // if not changing sunrise duration it sets to 1, but not 5 (the default should be) WTF????
+        Log.v("AlarmAlertFullScreen: Sunrize Duration = " + String.valueOf(mAlarm.sunrise_duration) + " alarm.id = "+String.valueOf(mAlarm.hashCode()));
+
         // Get the volume/camera button behavior setting
         final String vol =
                 PreferenceManager.getDefaultSharedPreferences(this)
@@ -167,7 +171,6 @@ public class AlarmAlertFullScreen extends Activity {
         setTitle();
 
         final int delay = mAlarm.sunrise_duration*60;
-        Log.v("Sunrize Duration = " + String.valueOf(delay));
         /*If Sunrise duration is not set to 0*/
         if (delay > 0) {
             /*Enable dismiss with a single touch until the IU shows*/
@@ -218,7 +221,7 @@ public class AlarmAlertFullScreen extends Activity {
                 int COLOR_STAGES = 16;
                 private void sendSymbol(String symbol){
                     try {
-                        InetAddress address = InetAddress.getByName("10.0.0.6");
+                        InetAddress address = InetAddress.getByName("192.168.1.100");
                         byte[] buffer = new BigInteger(symbol,16).toByteArray();
                         DatagramSocket datagramSocket = new DatagramSocket();
                         datagramSocket.send(new DatagramPacket(buffer, buffer.length, address, 8899));
@@ -231,6 +234,7 @@ public class AlarmAlertFullScreen extends Activity {
                 private void reset() {
                     for (int i=0;i<9;i++)
                         sendSymbol(dimmer);
+                        pause(100);
                     sendSymbol(rgb+Integer.toHexString(startColor)+"55");
                 }
                 private void pause(long ms) {
@@ -246,14 +250,17 @@ public class AlarmAlertFullScreen extends Activity {
                     pause(1000);
                     sendSymbol(all_on);
                     pause(1000);
+                    reset();
+                    pause(1000);
                     for (int i=1;i<=COLOR_STAGES;i++) {
                         sendSymbol(rgb + Integer.toHexString(startColor-i) + "55");
-                        if (i % 4 == 0)
+                        if (i % 3 == 0)
                             sendSymbol(brighter);
                         pause(1000*d/COLOR_STAGES);
                     }
-                    //reset();
-                    //sendSymbol(all_off);
+                    pause(30*60*1000);
+                    reset();
+                    sendSymbol(all_off);
                 }
             });
 
@@ -305,7 +312,9 @@ public class AlarmAlertFullScreen extends Activity {
         // Notify the user that the alarm has been snoozed.
         Intent cancelSnooze = new Intent(this, AlarmReceiver.class);
         cancelSnooze.setAction(Alarms.CANCEL_SNOOZE);
+
         cancelSnooze.putExtra(Alarms.ALARM_INTENT_EXTRA, mAlarm);
+        Log.v("AlarmAlertFullScreen snooze: Set Sunrize Duration = " + String.valueOf(mAlarm.sunrise_duration));
         PendingIntent broadcast =
                 PendingIntent.getBroadcast(this, mAlarm.id, cancelSnooze, 0);
         NotificationManager nm = getNotificationManager();

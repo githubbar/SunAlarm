@@ -412,6 +412,7 @@ public class Alarms {
         // byte[] array. The AlarmReceiver class knows to build the Alarm
         // object from the byte[] array.
         Parcel out = Parcel.obtain();
+        Log.v("Alarms.enableAlert: Sunrize Duration = " + String.valueOf(alarm.sunrise_duration));
         alarm.writeToParcel(out, 0);
         out.setDataPosition(0);
         intent.putExtra(ALARM_RAW_DATA, out.marshall());

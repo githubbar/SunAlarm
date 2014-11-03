@@ -205,7 +205,6 @@ public final class Alarm implements Parcelable {
         }
         sunrise_duration = c.getInt(Columns.ALARM_SUNRISE_DURATION_INDEX);
     }
-
     public Alarm(Parcel p) {
         id = p.readInt();
         enabled = p.readInt() == 1;
